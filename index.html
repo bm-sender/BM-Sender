@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BM Sander - Ultimate Responsive Pro 3D</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background: #d8e3f4;
+            color: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* App Frame Layout */
+        .app-frame {
+            width: 100%;
+            height: 100%;
+            max-width: 480px;
+            max-height: 100vh;
+            background: linear-gradient(145deg, #e6ecf8, #cfd9ec);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.25), inset 0 3px 6px rgba(255,255,255,1), inset 0 -3px 6px rgba(148,163,184,0.4);
+            border: 3px solid rgba(255, 255, 255, 0.95);
+        }
+
+        @media (min-width: 481px) {
+            .app-frame {
+                height: 94vh;
+                border-radius: 40px;
+                overflow: hidden;
+                border: 8px solid #cbd5e1;
+                box-shadow: 0 50px 130px rgba(0,0,0,0.3), 0 0 0 3px #94a3b8;
+            }
+        }
+
+        /* iOS Style Frosted Glass Notification */
+        .notification {
+            position: fixed;
+            top: -90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            color: #0f172a;
+            padding: 12px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), inset 0 1px 2px rgba(255, 255, 255, 1);
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 92%;
+            max-width: 360px;
+            justify-content: flex-start;
+        }
+        .notification.show { top: 18px; }
+        .notification.error {
+            background: rgba(254, 226, 226, 0.95) !important;
+            border-color: rgba(239, 68, 68, 0.6) !important;
+            color: #991b1b !important;
+        }
+        .notification i { color: #dc2626; font-size: 16px; }
+
+        /* Security Overlay */
+        .global-security-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(203, 213, 225, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .global-security-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .compact-spinner-box {
+            background: linear-gradient(145deg, #ffffff, #d2def2);
+            padding: 16px 26px;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 2px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 25px 50px rgba(148, 163, 184, 0.6), inset 0 4px 8px rgba(255, 255, 255, 1);
+        }
+
+        .spinner-circle-compact {
+            width: 26px;
+            height: 26px;
+            border: 3px solid rgba(148, 163, 184, 0.2);
+            border-top: 3px solid #dc2626;
+            border-right: 3px solid #ff416c;
+            border-radius: 50%;
+            animation: spinNewStyle 0.9s linear infinite;
+        }
+        @keyframes spinNewStyle {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .compact-spinner-text {
+            font-size: 14px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        /* Top Header Bar */
+        .top-bar {
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #b8c5d6;
+            z-index: 10;
+            flex-shrink: 0;
+            box-shadow: 0 10px 25px rgba(148, 163, 184, 0.4), inset 0 2px 3px rgba(255,255,255,1);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4b2b, #dc2626);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.5), inset 0 2px 4px rgba(255,255,255,0.8);
+            border: 2px solid #fff;
+        }
+
+        .user-details span { font-size: 10px; color: #64748b; text-transform: uppercase; font-weight: 700; }
+        .user-details h3 { font-size: 15px; color: #0f172a; font-weight: 800; }
+
+        .top-icons { display: flex; gap: 14px; font-size: 18px; color: #334155; cursor: pointer; }
+        .hidden-auth-element { display: none !important; }
+
+        .main-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            padding-bottom: 100px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-page {
+            display: none;
+            animation: fadeIn3D 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .tab-page.active { display: block; }
+
+        @keyframes fadeIn3D {
+            from { opacity: 0; transform: translateY(12px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .sticky-dashboard-wrapper {
+            position: sticky;
+            top: 0;
+            background: #dce4f2;
+            padding-top: 2px;
+            padding-bottom: 12px;
+            z-index: 50;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .wallet-card {
+            background: linear-gradient(145deg, #ffffff, #c7d6ee);
+            color: #0f172a;
+            border-radius: 24px;
+            padding: 16px 20px;
+            box-shadow: 14px 14px 35px rgba(148, 163, 184, 0.5), -12px -12px 30px rgba(255, 255, 255, 1), inset 0 2px 4px rgba(255,255,255,1);
+            border: 2px solid rgba(255, 255, 255, 1);
+        }
+
+        .wallet-header { font-size: 11px; color: #475569; margin-bottom: 4px; font-weight: 800; text-transform: uppercase; }
+        .wallet-row { display: flex; justify-content: space-between; align-items: center; }
+        .balance-val { font-size: 20px; font-weight: 800; color: #0f172a; }
+        .coins-val { 
+            background: rgba(220, 38, 38, 0.12); 
+            color: #dc2626; 
+            padding: 6px 14px; 
+            border-radius: 16px; 
+            font-size: 11px; 
+            font-weight: 800; 
+            border: 1px solid rgba(220, 38, 38, 0.3); 
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .coins-val.ready {
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .sec-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 12px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .serv-card {
+            background: linear-gradient(145deg, #ffffff, #cbd8ee);
+            border-radius: 22px;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 12px 12px 28px rgba(148, 163, 184, 0.5), -12px -12px 28px rgba(255, 255, 255, 1);
+            border: 2px solid rgba(255, 255, 255, 1);
+            cursor: pointer;
+        }
+
+        .serv-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 10px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.15), inset 0 2px 4px rgba(255,255,255,0.9);
+        }
+
+        .serv-title { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+        .serv-sub { font-size: 20px; color: #0f172a; margin-top: 2px; font-weight: 800; }
+
+        .btn-action {
+            background: linear-gradient(180deg, #ff416c 0%, #dc2626 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.5), inset 0 2px 4px rgba(255,255,255,0.7);
+            width: 100%;
+        }
+
+        .auth-card {
+            background: linear-gradient(145deg, #ffffff, #cbd8ee);
+            border-radius: 26px;
+            padding: 22px;
+            box-shadow: 14px 14px 35px rgba(148, 163, 184, 0.5), -14px -14px 35px rgba(255, 255, 255, 1);
+            margin-top: 15px;
+            border: 2px solid rgba(255,255,255,1);
+        }
+        .auth-title { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 4px; text-align: center; }
+        .auth-sub { font-size: 12px; color: #64748b; text-align: center; margin-bottom: 18px; font-weight: 600; }
+        .auth-switch { text-align: center; margin-top: 14px; font-size: 12px; color: #dc2626; font-weight: 700; cursor: pointer; }
+
+        /* Bottom Navigation Bar */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 76px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 14px;
+            border-top: 2px solid rgba(255, 255, 255, 1);
+            z-index: 100;
+            box-shadow: 0 -20px 45px rgba(148, 163, 184, 0.45);
+        }
+
+        .nav-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex: 1;
+            padding: 0 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            font-size: 10px;
+            cursor: pointer;
+            gap: 3px;
+            font-weight: 600;
+            width: 52px;
+            text-align: center;
+        }
+        .nav-link.active { color: #dc2626; font-weight: 700; transform: translateY(-2px); }
+        .nav-link i { font-size: 18px; }
+        .nav-link.hidden-tab { display: none !important; }
+
+        .nav-center-wrapper {
+            position: absolute;
+            left: 50%;
+            top: -20px;
+            transform: translateX(-50%);
+            z-index: 110;
+        }
+        .circle-btn {
+            width: 58px;
+            height: 58px;
+            background: linear-gradient(135deg, #ff4b2b, #dc2626);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 22px;
+            box-shadow: 0 12px 30px rgba(220, 38, 38, 0.7), inset 0 3px 6px rgba(255,255,255,0.8);
+            border: 3px solid #ffffff;
+            cursor: pointer;
+        }
+
+        .custom-input, .custom-textarea { 
+            width: 100%; 
+            padding: 14px; 
+            border-radius: 16px; 
+            border: 1.5px solid #cbd5e1; 
+            background: #ffffff; 
+            font-size: 13px; 
+            outline: none; 
+            margin-bottom: 14px; 
+            box-shadow: inset 5px 5px 10px rgba(148, 163, 184, 0.35), inset -5px -5px 10px rgba(255, 255, 255, 1);
+            color: #0f172a;
+        }
+        .custom-textarea { height: 100px; resize: none; }
+
+        .paste-box-wrapper {
+            position: relative;
+            background: linear-gradient(145deg, #ffffff, #cbd8ee);
+            padding: 20px;
+            border-radius: 24px;
+            border: 2px solid rgba(255,255,255,1);
+            margin-bottom: 16px;
+            box-shadow: 14px 14px 30px rgba(148, 163, 184, 0.45);
+        }
+
+        .custom-dropdown-container {
+            position: relative;
+            margin-bottom: 14px;
+        }
+
+        .selected-bar {
+            background: linear-gradient(145deg, #ffffff, #cbd8ee);
+            border: 2px solid #dc2626;
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            box-shadow: 10px 10px 25px rgba(148, 163, 184, 0.5), -10px -10px 25px rgba(255, 255, 255, 1);
+        }
+        .selected-bar .left-info { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 13px; color: #0f172a; }
+
+        .dropdown-options-list {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 99;
+            overflow: hidden;
+        }
+        .dropdown-options-list.show { display: block; }
+
+        .dropdown-item {
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .dropdown-item img { width: 22px; height: 22px; object-fit: contain; }
+        .dropdown-item:hover { background: #fee2e2; color: #dc2626; }
+
+        .big-logo-box {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 18px;
+            background: linear-gradient(145deg, #ffffff, #cbd8ee);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 1);
+            box-shadow: 12px 12px 30px rgba(148, 163, 184, 0.4);
+            display: none;
+        }
+        .big-logo-box img { width: 48px; height: 48px; object-fit: contain; margin-bottom: 6px; }
+        .big-logo-box span { display: block; font-size: 13px; font-weight: 700; color: #334155; }
+
+        .processing-box {
+            display: none;
+            background: #fff;
+            padding: 16px;
+            border-radius: 16px;
+            margin-top: 14px;
+            border: 1.5px solid #cbd5e1;
+            box-shadow: 10px 10px 20px rgba(148, 163, 184, 0.35);
+        }
+        .processing-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #0f172a; }
+        .progress-bar-bg { width: 100%; height: 10px; background: #f1f5f9; border-radius: 8px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(135deg, #ff416c, #dc2626); }
+        .time-info { display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 6px; }
+
+        /* === PERFECT ALIGNED ITEM CARD FIX (NO OVERFLOW) === */
+        .item-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: linear-gradient(145deg, #ffffff, #d2def2);
+            border-radius: 16px;
+            margin-bottom: 10px;
+            border: 2px solid rgba(255, 255, 255, 1);
+            box-shadow: 8px 8px 20px rgba(148, 163, 184, 0.4);
+            height: 60px;
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .email-security-sheet {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            bottom: 6px;
+            width: calc(100% - 110px); /* Strictly fits inside card without pushing Send button */
+            background: linear-gradient(145deg, #ffffff, #cbd8ee);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 5;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            gap: 6px;
+            border: 1.5px solid rgba(220, 38, 38, 0.25);
+            border-radius: 12px;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,1);
+        }
+
+        .security-sheet-icon {
+            width: 22px;
+            height: 22px;
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid rgba(220, 38, 38, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc2626;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .security-sheet-text {
+            font-size: 9px;
+            font-weight: 800;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-text-secure {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+            z-index: 1;
+            opacity: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: calc(100% - 115px);
+        }
+
+        /* 100% FIXED ALIGNED SEND BUTTON */
+        .send-btn {
+            color: white;
+            border: none;
+            padding: 0 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            box-shadow: 0 4px 12px rgba(220,38,38,0.4);
+            width: 90px;
+            min-width: 90px;
+            height: 40px;
+            z-index: 10;
+            flex-shrink: 0;
+            margin-left: auto; /* Aligns strictly to the right side always */
+        }
+
+        .empty-state { text-align: center; padding: 25px 16px; color: #94a3b8; font-weight: 500; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-frame">
+
+        <!-- Notification Banner -->
+        <div class="notification" id="notification">
+            <i class="fas fa-bell" id="notif-icon"></i> <span id="notif-text">BM Sander 3D Ready!</span>
+        </div>
+
+        <!-- Security Overlay -->
+        <div class="global-security-overlay" id="global-security-overlay">
+            <div class="compact-spinner-box">
+                <div class="spinner-circle-compact"></div>
+                <div class="compact-spinner-text">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Top Header Bar -->
+        <div class="top-bar">
+            <div class="user-profile">
+                <div class="avatar" id="user-avatar-initial">B</div>
+                <div class="user-details">
+                    <span>Welcome,</span>
+                    <h3 id="user-display-name">BM Sander!</h3>
+                </div>
+            </div>
+            <div class="top-icons hidden-auth-element" id="top-auth-icons">
+                <i class="fa-solid fa-key" onclick="playBeep('click'); openChangePasswordModal()" title="Change Password"></i>
+                <i class="fa-solid fa-right-from-bracket" onclick="playBeep('click'); logoutUser()" title="Logout"></i>
+            </div>
+        </div>
+
+        <!-- Main Content Container -->
+        <div class="main-container" id="main-scroll-box" onscroll="handleScrollHide()">
+
+            <!-- AUTH SCREEN (No Sheet - Completely Clean) -->
+            <div id="page-auth" class="tab-page active">
+                <div class="auth-card">
+                    <div class="auth-title" id="auth-title-text">BM Sander Secure Login</div>
+                    <div class="auth-sub" id="auth-sub-text">Saved directly to Mobile Storage</div>
+
+                    <div id="register-fields" style="display:none;">
+                        <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">Full Name / Nickname</label>
+                        <input type="text" class="custom-input" id="reg-name" placeholder="Enter your name...">
+                    </div>
+
+                    <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;" id="auth-label-user">Email / Username</label>
+                    <input type="text" class="custom-input" id="auth-email" placeholder="Enter email or username...">
+
+                    <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;" id="auth-label-pass">Secret Password / Master Pin</label>
+                    <input type="password" class="custom-input" id="auth-pass" placeholder="Enter password or master pin...">
+
+                    <div id="recovery-newpass-field" style="display:none;">
+                        <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">New Password</label>
+                        <input type="password" class="custom-input" id="recovery-newpass" placeholder="Enter new password...">
+                    </div>
+
+                    <button class="btn-action" id="auth-submit-btn" onclick="playBeep('click'); handleAuthSubmit()">
+                        <i class="fas fa-lock"></i> Secure Login
+                    </button>
+
+                    <div style="display:flex; justify-content:space-between; margin-top:14px;">
+                        <div class="auth-switch" id="auth-switch-text" onclick="playBeep('click'); toggleAuthMode()">Register account</div>
+                        <div class="auth-switch" id="auth-forgot-text" style="color:#0284c7;" onclick="playBeep('click'); toggleRecoveryMode()">Forgot Password?</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHANGE PASSWORD PAGE -->
+            <div id="page-changepass" class="tab-page">
+                <div class="auth-card">
+                    <div class="auth-title">Change Password</div>
+                    <div class="auth-sub">Update your account security key</div>
+
+                    <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">Old Password</label>
+                    <input type="password" class="custom-input" id="old-pass" placeholder="Enter old password...">
+
+                    <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">New Password</label>
+                    <input type="password" class="custom-input" id="new-pass" placeholder="Enter new password...">
+
+                    <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">Confirm New Password</label>
+                    <input type="password" class="custom-input" id="confirm-pass" placeholder="Confirm new password...">
+
+                    <button class="btn-action" onclick="playBeep('click'); executePasswordChange()">
+                        <i class="fas fa-save"></i> Save & Change Password
+                    </button>
+
+                    <div class="auth-switch" onclick="playBeep('click'); switchPage('home', document.querySelectorAll('.nav-link')[0])" style="margin-top:14px;">
+                        Cancel & Back to Home
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 1: HOME PAGE -->
+            <div id="page-home" class="tab-page">
+                <div class="sticky-dashboard-wrapper" id="sticky-header-wrap">
+                    <div class="wallet-card">
+                        <div class="wallet-header" id="top-dash-title-home">BM SANDER CONFIG STATUS</div>
+                        <div class="wallet-row">
+                            <div class="balance-val" id="dash-total-pasted">0 Items</div>
+                            <div class="coins-val" id="status-badge-home"><i class="fas fa-times-circle"></i> Config Pending</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sec-title"><span>System Statistics</span></div>
+
+                <div class="services-grid">
+                    <div class="serv-card" onclick="playBeep('click')">
+                        <div class="serv-icon" style="background: #e0f2fe; color: #0284c7;"><i class="fas fa-envelope"></i></div>
+                        <div class="serv-title">Gmail Queue</div>
+                        <div class="serv-sub" id="dash-unique-email">0</div>
+                    </div>
+                    <div class="serv-card" onclick="playBeep('click')">
+                        <div class="serv-icon" style="background: #d1fae5; color: #059669;"><i class="fab fa-whatsapp"></i></div>
+                        <div class="serv-title">WhatsApp Queue</div>
+                        <div class="serv-sub" id="dash-unique-wa">0</div>
+                    </div>
+                    <div class="serv-card" onclick="playBeep('click')">
+                        <div class="serv-icon" style="background: #fef3c7; color: #d97706;"><i class="fas fa-copy"></i></div>
+                        <div class="serv-title">Duplicates</div>
+                        <div class="serv-sub" id="dash-duplicate">0</div>
+                    </div>
+                    <div class="serv-card" onclick="playBeep('click')">
+                        <div class="serv-icon" style="background: #fee2e2; color: #dc2626;"><i class="fas fa-paper-plane"></i></div>
+                        <div class="serv-title">Sent History</div>
+                        <div class="serv-sub" id="dash-sent">0</div>
+                    </div>
+                </div>
+
+                <div class="sec-title"><span>BM Sander System Log</span></div>
+
+                <div style="background:linear-gradient(145deg, #ffffff, #cbd8ee); padding:18px; border-radius:24px; border:2px solid rgba(255,255,255,1); box-shadow:12px 12px 30px rgba(148, 163, 184, 0.45);">
+                    <div id="dashboard-history" class="empty-state">
+                        <p>No recent activity performed yet.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: PASTE DATA (No Sheet - Clean Textarea Input) -->
+            <div id="page-paste" class="tab-page">
+                <div class="sticky-dashboard-wrapper">
+                    <div class="wallet-card">
+                        <div class="wallet-header">PASTE WORKSPACE</div>
+                        <div class="wallet-row">
+                            <div class="balance-val" id="paste-dash-count">0 Input Lines</div>
+                            <div class="coins-val"><i class="fas fa-edit"></i> Input Active</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="paste-box-wrapper">
+                    <textarea class="custom-textarea" id="raw-input" placeholder="Paste bulk WhatsApp numbers or Gmail addresses here..." oninput="updatePasteDashboard()"></textarea>
+                    
+                    <button class="btn-action" onclick="playBeep('click'); startProcessing()" style="margin-top: 14px;">
+                        <i class="fas fa-filter"></i> Clean & Extract Data
+                    </button>
+
+                    <div class="processing-box" id="processing-box">
+                        <div class="processing-header">
+                            <span><i class="fas fa-spinner fa-spin"></i> Processing & Cleaning...</span>
+                            <span id="speed-msg-text" style="font-size: 11px; color: #0284c7; font-weight: 700;">Saved Locally</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progress-fill"></div>
+                        </div>
+                        <div class="time-info">
+                            <span id="items-calc-text">0 items loaded</span>
+                            <span>Ready</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: CONFIG SETUP -->
+            <div id="page-config" class="tab-page">
+                <div class="sticky-dashboard-wrapper">
+                    <div class="wallet-card">
+                        <div class="wallet-header">BM SANDER CONFIGURATION</div>
+                        <div class="wallet-row">
+                            <div class="balance-val" id="config-dash-mode">No Platform Selected</div>
+                            <div class="coins-val"><i class="fas fa-cog"></i> Setup Mode</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:linear-gradient(145deg, #ffffff, #cbd8ee); padding:20px; border-radius:24px; border:2px solid rgba(255,255,255,1); margin-bottom:16px; box-shadow:12px 12px 30px rgba(148, 163, 184, 0.45);">
+                    <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">Select Official Platform</label>
+                    <div class="custom-dropdown-container">
+                        <div class="selected-bar" onclick="playBeep('click'); toggleDropdown()">
+                            <div class="left-info" id="selected-platform-info">
+                                <img src="" id="selected-logo" style="display:none; width:22px; height:22px; object-fit:contain;">
+                                <span style="color:#94a3b8; font-weight:500;" id="selected-text">-- Select Platform --</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down" style="font-size:12px; color:#64748b;"></i>
+                        </div>
+
+                        <div class="dropdown-options-list" id="dropdown-menu">
+                            <div class="dropdown-item" onclick="playBeep('click'); selectOption('whatsapp', 'WhatsApp Messenger', 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg')">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+                                <span>WhatsApp Messenger</span>
+                            </div>
+                            <div class="dropdown-item" onclick="playBeep('click'); selectOption('gmail', 'Gmail (Google Mail)', 'https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg')">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail">
+                                <span>Gmail (Google Mail)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="big-logo-display" class="big-logo-box">
+                        <img id="preview-logo-img" src="" alt="Selected Platform">
+                        <span id="preview-title-text">Platform Selected</span>
+                    </div>
+
+                    <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">Subject / Heading</label>
+                    <input type="text" class="custom-input" id="cfg-subject" placeholder="Enter Subject / Title...">
+
+                    <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">Message Body / Promo Link</label>
+                    <textarea class="custom-textarea" id="cfg-link" placeholder="Enter Message text or Link..."></textarea>
+
+                    <button class="btn-action" onclick="playBeep('click'); saveConfig()">
+                        <i class="fas fa-save"></i> Save Configuration
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB 4: GMAIL QUEUE -->
+            <div id="page-gmail" class="tab-page">
+                <div class="sticky-dashboard-wrapper">
+                    <div class="wallet-card">
+                        <div class="wallet-header">GMAIL QUEUE DASHBOARD</div>
+                        <div class="wallet-row">
+                            <div class="balance-val" id="gmail-dash-count">0 Sent / 0 Pending</div>
+                            <div class="coins-val ready"><i class="fas fa-envelope"></i> Active Queue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:linear-gradient(145deg, #ffffff, #cbd8ee); padding:14px; border-radius:24px; border:2px solid rgba(255,255,255,1); box-shadow:12px 12px 30px rgba(148, 163, 184, 0.45);">
+                    <div id="unique-email-list">
+                        <div class="empty-state"><p>No unique emails extracted yet.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: WHATSAPP QUEUE -->
+            <div id="page-whatsapp" class="tab-page">
+                <div class="sticky-dashboard-wrapper">
+                    <div class="wallet-card">
+                        <div class="wallet-header">WHATSAPP QUEUE DASHBOARD</div>
+                        <div class="wallet-row">
+                            <div class="balance-val" id="wa-dash-count">0 Sent / 0 Pending</div>
+                            <div class="coins-val ready"><i class="fab fa-whatsapp"></i> Active Queue</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:linear-gradient(145deg, #ffffff, #cbd8ee); padding:14px; border-radius:24px; border:2px solid rgba(255,255,255,1); box-shadow:12px 12px 30px rgba(148, 163, 184, 0.45);">
+                    <div id="unique-wa-list">
+                        <div class="empty-state"><p>No WhatsApp numbers extracted yet.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: SENT HISTORY TAB -->
+            <div id="page-sent" class="tab-page">
+                <div class="sticky-dashboard-wrapper">
+                    <div class="wallet-card">
+                        <div class="wallet-header">APPROVED DASHBOARD</div>
+                        <div class="wallet-row">
+                            <div class="balance-val" id="sent-dash-count">0 Sent History</div>
+                            <div class="coins-val"><i class="fas fa-paper-plane"></i> Sent History</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:linear-gradient(145deg, #ffffff, #cbd8ee); padding:14px; border-radius:24px; border:2px solid rgba(255,255,255,1); box-shadow:12px 12px 30px rgba(148, 163, 184, 0.45);">
+                    <div id="sent-list">
+                        <div class="empty-state"><p>No history yet.</p></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="bottom-nav" id="bottom-nav-bar" style="display:none;">
+            <div class="nav-group">
+                <div class="nav-link active" onclick="playBeep('click'); switchPage('home', this)">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Home</span>
+                </div>
+                <div class="nav-link" onclick="playBeep('click'); switchPage('paste', this)">
+                    <i class="fa-solid fa-edit"></i>
+                    <span>Paste</span>
+                </div>
+            </div>
+
+            <div class="nav-center-wrapper">
+                <div class="circle-btn" id="middle-btn" onclick="playBeep('click'); switchPage('config', this)">
+                    <i class="fas fa-times" id="middle-icon"></i>
+                </div>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-link hidden-tab" id="nav-gmail-btn" onclick="playBeep('click'); switchPage('gmail', this)">
+                    <i class="fas fa-envelope"></i>
+                    <span>Gmail</span>
+                </div>
+                <div class="nav-link hidden-tab" id="nav-wa-btn" onclick="playBeep('click'); switchPage('whatsapp', this)">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                </div>
+                <div class="nav-link" onclick="playBeep('click'); switchPage('sent', this)">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Approved</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        try { if (AudioContextClass) audioCtx = new AudioContextClass(); } catch (e) { audioCtx = null; }
+
+        function playBeep(type) {
+            if (!audioCtx) return;
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                let freq = 600;
+                let duration = 0.08;
+
+                if (type === 'click') { freq = 900; duration = 0.05; }
+                else if (type === 'error') { freq = 220; duration = 0.25; }
+                else if (type === 'success') { freq = 1400; duration = 0.12; }
+
+                osc.frequency.value = freq;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.6, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {}
+        }
+
+        let currentUser = null;
+        let isRegisterMode = false;
+        let isRecoveryMode = false;
+
+        let selectedPlatform = null;
+        let selectedPlatformName = '';
+        let selectedPlatformLogo = '';
+
+        let uniqueEmails = [];
+        let uniqueWhatsApp = [];
+        let duplicateItems = [];
+        let sentItems = [];
+        let totalPastedCount = 0;
+        let isConfigSaved = false;
+
+        const ADMIN_MASTER_PIN = "BmSander#2026_@Pro-123=<*!";
+
+        function handleScrollHide() {
+            const scrollBox = document.getElementById('main-scroll-box');
+            const stickyHeader = document.getElementById('sticky-header-wrap');
+            if(!stickyHeader || !scrollBox) return;
+
+            if(scrollBox.scrollTop > 35) {
+                stickyHeader.style.transform = 'translateY(-120%)';
+                stickyHeader.style.opacity = '0';
+            } else {
+                stickyHeader.style.transform = 'translateY(0)';
+                stickyHeader.style.opacity = '1';
+            }
+        }
+
+        function getUsersDB() {
+            try {
+                return JSON.parse(localStorage.getItem('bm_sander_mobile_storage_db') || '{}');
+            } catch(e) {
+                return {};
+            }
+        }
+
+        function saveUsersDB(db) {
+            try {
+                localStorage.setItem('bm_sander_mobile_storage_db', JSON.stringify(db));
+            } catch(e) {
+                console.error("Storage full", e);
+            }
+        }
+
+        function triggerSecurityLock(callback) {
+            const overlay = document.getElementById('global-security-overlay');
+            overlay.classList.add('active');
+
+            setTimeout(() => {
+                overlay.classList.remove('active');
+                if(callback) callback();
+            }, 600);
+        }
+
+        function toggleAuthMode() {
+            triggerSecurityLock(() => {
+                isRegisterMode = !isRegisterMode;
+                isRecoveryMode = false;
+                document.getElementById('register-fields').style.display = isRegisterMode ? 'block' : 'none';
+                document.getElementById('recovery-newpass-field').style.display = 'none';
+                document.getElementById('auth-pass').style.display = 'block';
+                document.getElementById('auth-label-pass').style.display = 'block';
+                document.getElementById('auth-title-text').innerText = isRegisterMode ? 'BM Sander Register' : 'BM Sander Secure Login';
+                document.getElementById('auth-label-user').innerText = 'Email / Username';
+                document.getElementById('auth-email').placeholder = 'Enter email or username...';
+                document.getElementById('auth-pass').placeholder = 'Enter password...';
+                document.getElementById('auth-submit-btn').innerHTML = isRegisterMode ? '<i class="fas fa-user-plus"></i> Register & Start' : '<i class="fas fa-lock"></i> Secure Login';
+                document.getElementById('auth-switch-text').innerText = isRegisterMode ? 'Already have an account? Login here' : "Don't have an account? Register here";
+                document.getElementById('auth-forgot-text').style.display = isRegisterMode ? 'none' : 'block';
+                showAlert('Mode switched successfully!');
+            });
+        }
+
+        function toggleRecoveryMode() {
+            triggerSecurityLock(() => {
+                isRecoveryMode = !isRecoveryMode;
+                isRegisterMode = false;
+                document.getElementById('register-fields').style.display = 'none';
+                document.getElementById('auth-title-text').innerText = isRecoveryMode ? 'BM Sander Pin Recovery' : 'BM Sander Secure Login';
+                document.getElementById('auth-label-user').innerText = 'Enter Your Account Email';
+                document.getElementById('auth-email').placeholder = 'Enter your registered email...';
+                
+                if(isRecoveryMode) {
+                    document.getElementById('auth-label-pass').innerText = 'Enter Master Character Pin';
+                    document.getElementById('auth-pass').placeholder = 'Paste master pin with symbols...';
+                    document.getElementById('recovery-newpass-field').style.display = 'block';
+                    document.getElementById('auth-submit-btn').innerHTML = '<i class="fas fa-key"></i> Reset Password & Login';
+                    document.getElementById('auth-switch-text').style.display = 'none';
+                    document.getElementById('auth-forgot-text').innerText = 'Back to Normal Login';
+                } else {
+                    document.getElementById('auth-label-pass').innerText = 'Secret Password';
+                    document.getElementById('auth-pass').placeholder = 'Enter password...';
+                    document.getElementById('recovery-newpass-field').style.display = 'none';
+                    document.getElementById('auth-submit-btn').innerHTML = '<i class="fas fa-lock"></i> Secure Login';
+                    document.getElementById('auth-switch-text').style.display = 'block';
+                    document.getElementById('auth-switch-text').innerText = "Don't have an account? Register here";
+                    document.getElementById('auth-forgot-text').innerText = 'Forgot Password?';
+                }
+                showAlert('Recovery mode updated!');
+            });
+        }
+
+        function handleAuthSubmit() {
+            triggerSecurityLock(() => {
+                const inputVal = document.getElementById('auth-email').value.trim();
+                const pass = document.getElementById('auth-pass').value.trim();
+                const nameField = document.getElementById('reg-name');
+                const name = nameField ? nameField.value.trim() : '';
+
+                let db = getUsersDB();
+
+                if(isRecoveryMode) {
+                    const newPass = document.getElementById('recovery-newpass').value.trim();
+                    if(!inputVal || !pass || !newPass) {
+                        playBeep('error');
+                        showAlert('Please fill in all recovery fields!', true);
+                        return;
+                    }
+                    if(pass !== ADMIN_MASTER_PIN) {
+                        playBeep('error');
+                        showAlert('Incorrect Master Character Pin!', true);
+                        return;
+                    }
+                    if(!db[inputVal]) {
+                        playBeep('error');
+                        showAlert('Account email not found in storage!', true);
+                        return;
+                    }
+
+                    db[inputVal].pass = newPass;
+                    saveUsersDB(db);
+                    playBeep('success');
+                    showAlert('Password reset successfully with Master Pin!');
+                    isRecoveryMode = false;
+                    isRegisterMode = false;
+                    loginUserSession(inputVal, db[inputVal]);
+                    return;
+                }
+
+                if(!inputVal || (!isRegisterMode && !pass)) {
+                    playBeep('error');
+                    showAlert('Please fill in all required fields!', true);
+                    return;
+                }
+
+                if(isRegisterMode) {
+                    if(!name) {
+                        playBeep('error');
+                        showAlert('Please enter your name!', true);
+                        return;
+                    }
+                    if(db[inputVal]) {
+                        playBeep('error');
+                        showAlert('Already Registered!', true);
+                        return;
+                    }
+                    db[inputVal] = {
+                        name: name,
+                        pass: pass,
+                        uniqueEmails: [],
+                        uniqueWhatsApp: [],
+                        duplicateItems: [],
+                        sentItems: [],
+                        totalPastedCount: 0
+                    };
+                    saveUsersDB(db);
+                    playBeep('success');
+                    showAlert('Account registered & saved!');
+                    loginUserSession(inputVal, db[inputVal]);
+                } else {
+                    if(!db[inputVal] || db[inputVal].pass !== pass) {
+                        playBeep('error');
+                        showAlert('Invalid email or password!', true);
+                        return;
+                    }
+                    playBeep('success');
+                    showAlert('Login successful!');
+                    loginUserSession(inputVal, db[inputVal]);
+                }
+            });
+        }
+
+        function loginUserSession(email, userData) {
+            currentUser = email;
+            document.getElementById('user-display-name').innerText = userData.name;
+            document.getElementById('user-avatar-initial').innerText = userData.name.charAt(0).toUpperCase();
+
+            uniqueEmails = userData.uniqueEmails || [];
+            uniqueWhatsApp = userData.uniqueWhatsApp || [];
+            duplicateItems = userData.duplicateItems || [];
+            sentItems = userData.sentItems || [];
+            totalPastedCount = userData.totalPastedCount || 0;
+
+            document.getElementById('dashboard-history').innerHTML = `<div class="empty-state"><p>Loaded from mobile storage successfully.</p></div>`;
+            document.getElementById('raw-input').value = '';
+            updatePasteDashboard();
+
+            document.getElementById('top-auth-icons').classList.remove('hidden-auth-element');
+            document.getElementById('bottom-nav-bar').style.display = 'flex';
+            updateDashboards();
+            renderLists();
+            switchPage('home', document.querySelectorAll('.nav-link')[0]);
+        }
+
+        function openChangePasswordModal() {
+            triggerSecurityLock(() => {
+                switchPage('changepass', null);
+            });
+        }
+
+        function executePasswordChange() {
+            triggerSecurityLock(() => {
+                const oldPass = document.getElementById('old-pass').value.trim();
+                const newPass = document.getElementById('new-pass').value.trim();
+                const confirmPass = document.getElementById('confirm-pass').value.trim();
+
+                if(!oldPass || !newPass || !confirmPass) {
+                    playBeep('error');
+                    showAlert('Please fill in all password fields!', true);
+                    return;
+                }
+                if(newPass !== confirmPass) {
+                    playBeep('error');
+                    showAlert('Passwords do not match!', true);
+                    return;
+                }
+
+                let db = getUsersDB();
+                if(!db[currentUser] || db[currentUser].pass !== oldPass) {
+                    playBeep('error');
+                    showAlert('Incorrect old password!', true);
+                    return;
+                }
+
+                db[currentUser].pass = newPass;
+                saveUsersDB(db);
+                playBeep('success');
+                showAlert('Password updated in storage!');
+                switchPage('home', document.querySelectorAll('.nav-link')[0]);
+            });
+        }
+
+        function logoutUser() {
+            triggerSecurityLock(() => {
+                saveCurrentUserData();
+                currentUser = null;
+                document.getElementById('top-auth-icons').classList.add('hidden-auth-element');
+                document.getElementById('bottom-nav-bar').style.display = 'none';
+                switchPage('auth', null);
+                playBeep('success');
+                showAlert('Logged out securely!');
+            });
+        }
+
+        function saveCurrentUserData() {
+            if(!currentUser) return;
+            let db = getUsersDB();
+            if(db[currentUser]) {
+                db[currentUser].uniqueEmails = uniqueEmails;
+                db[currentUser].uniqueWhatsApp = uniqueWhatsApp;
+                db[currentUser].duplicateItems = duplicateItems;
+                db[currentUser].sentItems = sentItems;
+                db[currentUser].totalPastedCount = totalPastedCount;
+                saveUsersDB(db);
+            }
+        }
+
+        function toggleDropdown() {
+            document.getElementById('dropdown-menu').classList.toggle('show');
+        }
+
+        function selectOption(value, name, logo) {
+            triggerSecurityLock(() => {
+                selectedPlatform = value;
+                selectedPlatformName = name;
+                selectedPlatformLogo = logo;
+
+                document.getElementById('selected-logo').src = logo;
+                document.getElementById('selected-logo').style.display = 'block';
+                document.getElementById('selected-text').innerText = name;
+
+                const previewCard = document.getElementById('big-logo-display');
+                document.getElementById('preview-logo-img').src = logo;
+                document.getElementById('preview-title-text').innerText = `${name} Selected`;
+                previewCard.style.display = 'block';
+
+                toggleDropdown();
+                playBeep('success');
+                showAlert(`${name} Configured!`);
+            });
+        }
+
+        function showAlert(text, isError = false) {
+            const notif = document.getElementById('notification');
+            const icon = document.getElementById('notif-icon');
+            document.getElementById('notif-text').innerText = text;
+            
+            if(isError) {
+                notif.classList.add('error');
+                icon.className = 'fas fa-exclamation-triangle';
+            } else {
+                notif.classList.remove('error');
+                icon.className = 'fas fa-bell';
+            }
+
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 3500);
+        }
+
+        function switchPage(pageId, el) {
+            triggerSecurityLock(() => {
+                document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+                document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+
+                const targetPage = document.getElementById('page-' + pageId);
+                if(targetPage) {
+                    targetPage.classList.add('active');
+                }
+
+                if(el && el.classList.contains('nav-link')) {
+                    el.classList.add('active');
+                } else {
+                    document.querySelectorAll('.nav-link').forEach(n => {
+                        const onclickAttr = n.getAttribute('onclick');
+                        if(onclickAttr && onclickAttr.includes(pageId)) {
+                            n.classList.add('active');
+                        }
+                    });
+                }
+                showAlert(`Loaded ${pageId.toUpperCase()} page!`);
+            });
+        }
+
+        function updatePasteDashboard() {
+            const text = document.getElementById('raw-input').value;
+            const count = text.split('\n').filter(l => l.trim()).length;
+            const pasteCountEl = document.getElementById('paste-dash-count');
+            if(pasteCountEl) pasteCountEl.innerText = `${count} Input Lines`;
+        }
+
+        function saveConfig() {
+            triggerSecurityLock(() => {
+                const subject = document.getElementById('cfg-subject').value.trim();
+                const link = document.getElementById('cfg-link').value.trim();
+
+                if(!selectedPlatform) {
+                    playBeep('error');
+                    showAlert('Please select a platform first!', true);
+                    return;
+                }
+                if(!subject || !link) {
+                    playBeep('error');
+                    showAlert('Please enter Subject and Message/Link!', true);
+                    return;
+                }
+
+                isConfigSaved = true;
+                document.getElementById('middle-icon').className = 'fas fa-check';
+                
+                const badge = document.getElementById('status-badge-home');
+                if(badge) {
+                    badge.className = 'coins-val ready';
+                    badge.innerHTML = `<i class="fas fa-check-circle"></i> ${selectedPlatform.toUpperCase()} Ready`;
+                }
+                
+                const dashPasted = document.getElementById('dash-total-pasted');
+                if(dashPasted) dashPasted.innerText = `${selectedPlatform.toUpperCase()} Active`;
+                
+                const configMode = document.getElementById('config-dash-mode');
+                if(configMode) configMode.innerText = `${selectedPlatform.toUpperCase()} Mode Active`;
+
+                const gmailBtn = document.getElementById('nav-gmail-btn');
+                const waBtn = document.getElementById('nav-wa-btn');
+
+                if(selectedPlatform === 'whatsapp') {
+                    if(waBtn) waBtn.classList.remove('hidden-tab');
+                    if(gmailBtn) gmailBtn.classList.add('hidden-tab');
+                } else {
+                    if(gmailBtn) gmailBtn.classList.remove('hidden-tab');
+                    if(waBtn) waBtn.classList.add('hidden-tab');
+                }
+
+                playBeep('success');
+                showAlert('Configuration Saved!');
+                switchPage('home', document.querySelectorAll('.nav-link')[0]);
+            });
+        }
+
+        function startProcessing() {
+            triggerSecurityLock(() => {
+                if(!isConfigSaved) {
+                    playBeep('error');
+                    showAlert('Please setup config first!', true);
+                    switchPage('config', null);
+                    return;
+                }
+
+                const rawText = document.getElementById('raw-input').value;
+                if(!rawText.trim()) {
+                    playBeep('error');
+                    showAlert('Please paste data to extract!', true);
+                    return;
+                }
+
+                const lines = rawText.split('\n').filter(l => l.trim());
+                const itemCount = lines.length;
+
+                let totalSeconds = 2;
+
+                document.getElementById('processing-box').style.display = 'block';
+                document.getElementById('items-calc-text').innerText = `${itemCount} items loaded`;
+
+                let elapsedSeconds = 0;
+                let fill = document.getElementById('progress-fill');
+
+                let timer = setInterval(() => {
+                    elapsedSeconds++;
+                    let progress = Math.min(100, Math.round((elapsedSeconds / totalSeconds) * 100));
+                    
+                    fill.style.width = progress + '%';
+
+                    if(elapsedSeconds >= totalSeconds) {
+                        clearInterval(timer);
+                        setTimeout(() => {
+                            document.getElementById('processing-box').style.display = 'none';
+                            
+                            // AUTO CLEAR TEXTAREA WHEN CLEAN & EXTRACT FINISHES
+                            document.getElementById('raw-input').value = '';
+                            updatePasteDashboard();
+
+                            executeExtraction(rawText);
+                        }, 200);
+                    }
+                }, 500);
+            });
+        }
+
+        function executeExtraction(rawText) {
+            if(selectedPlatform === 'whatsapp') {
+                const phoneRegex = /\+?[0-9\s\-]{8,20}/g;
+                const rawMatches = rawText.match(phoneRegex) || [];
+                const cleanMatches = rawMatches.map(n => n.replace(/[^0-9]/g, '')).filter(n => n.length >= 8);
+
+                const seen = new Set();
+                uniqueWhatsApp = [];
+                cleanMatches.forEach(num => {
+                    if(seen.has(num)) duplicateItems.push(num);
+                    else { seen.add(num); uniqueWhatsApp.push(num); }
+                });
+
+                switchPage('whatsapp', document.getElementById('nav-wa-btn'));
+            } else {
+                const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+                const matches = rawText.match(emailRegex) || [];
+
+                const seen = new Set();
+                uniqueEmails = [];
+                matches.forEach(email => {
+                    const clean = email.toLowerCase();
+                    if(seen.has(clean)) duplicateItems.push(clean);
+                    else { seen.add(clean); uniqueEmails.push(clean); }
+                });
+
+                switchPage('gmail', document.getElementById('nav-gmail-btn'));
+            }
+
+            totalPastedCount += rawText.split('\n').filter(l => l.trim()).length;
+            saveCurrentUserData();
+            updateDashboards();
+            renderLists();
+            playBeep('success');
+            showAlert('Extracted & Saved!');
+        }
+
+        function updateDashboards() {
+            const dEmail = document.getElementById('dash-unique-email');
+            if(dEmail) dEmail.innerText = uniqueEmails.length;
+            
+            const dWa = document.getElementById('dash-unique-wa');
+            if(dWa) dWa.innerText = uniqueWhatsApp.length;
+            
+            const dDup = document.getElementById('dash-duplicate');
+            if(dDup) dDup.innerText = duplicateItems.length;
+            
+            const dSent = document.getElementById('dash-sent');
+            if(dSent) dSent.innerText = sentItems.length;
+
+            let totalSentCount = sentItems.length;
+            
+            const gCount = document.getElementById('gmail-dash-count');
+            if(gCount) gCount.innerText = `${totalSentCount} Sent / ${uniqueEmails.length} Pending`;
+            
+            const wCount = document.getElementById('wa-dash-count');
+            if(wCount) wCount.innerText = `${totalSentCount} Sent / ${uniqueWhatsApp.length} Pending`;
+            
+            const sCount = document.getElementById('sent-dash-count');
+            if(sCount) sCount.innerText = `${totalSentCount} Sent History`;
+
+            if(uniqueEmails.length > 0 || uniqueWhatsApp.length > 0 || sentItems.length > 0) {
+                const currentLog = `
+                    <div style="font-size:12px; color:#334155; padding:6px 0; border-bottom:1px solid #cbd5e1; font-weight:600;">
+                        <i class="fas fa-check-circle" style="color:#10b981;"></i> [Storage Saved]: 
+                        <strong>${uniqueEmails.length + uniqueWhatsApp.length} Encrypted Items</strong>
+                    </div>
+                `;
+                const histBox = document.getElementById('dashboard-history');
+                if(histBox) {
+                    if(histBox.querySelector('.empty-state')) {
+                        histBox.innerHTML = currentLog;
+                    } else {
+                        histBox.innerHTML = currentLog + histBox.innerHTML;
+                    }
+                }
+            }
+        }
+
+        function renderLists() {
+            const eContainer = document.getElementById('unique-email-list');
+            if(eContainer) {
+                if(uniqueEmails.length === 0) {
+                    eContainer.innerHTML = `<div class="empty-state"><p>No unique emails extracted yet.</p></div>`;
+                } else {
+                    eContainer.innerHTML = uniqueEmails.map(email => `
+                        <div class="item-card">
+                            <div class="email-security-sheet">
+                                <div class="security-sheet-icon"><i class="fas fa-shield-alt"></i></div>
+                                <div class="security-sheet-text">SECURE ENCRYPTED QUEUE</div>
+                            </div>
+                            <span class="item-text-secure">${email}</span>
+                            <button class="send-btn" style="background: linear-gradient(135deg, #ff416c, #dc2626)" onclick="playBeep('success'); dispatch('${email}', 'gmail')"><i class="fas fa-paper-plane"></i> Send</button>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            const wContainer = document.getElementById('unique-wa-list');
+            if(wContainer) {
+                if(uniqueWhatsApp.length === 0) {
+                    wContainer.innerHTML = `<div class="empty-state"><p>No WhatsApp numbers extracted yet.</p></div>`;
+                } else {
+                    wContainer.innerHTML = uniqueWhatsApp.map(num => `
+                        <div class="item-card">
+                            <div class="email-security-sheet">
+                                <div class="security-sheet-icon"><i class="fas fa-shield-alt"></i></div>
+                                <div class="security-sheet-text">SECURE WHATSAPP QUEUE</div>
+                            </div>
+                            <span class="item-text-secure">${num}</span>
+                            <button class="send-btn" style="background: #10b981" onclick="playBeep('success'); dispatch('${num}', 'whatsapp')"><i class="fab fa-whatsapp"></i> Send</button>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            const sContainer = document.getElementById('sent-list');
+            if(sContainer) {
+                if(sentItems.length === 0) {
+                    sContainer.innerHTML = `<div class="empty-state"><p>No history yet.</p></div>`;
+                } else {
+                    sContainer.innerHTML = sentItems.map(item => `
+                        <div class="item-card">
+                            <div class="email-security-sheet">
+                                <div class="security-sheet-icon"><i class="fas fa-check-circle"></i></div>
+                                <div class="security-sheet-text">SECURE DISPATCHED ITEM</div>
+                            </div>
+                            <span class="item-text-secure">${item}</span>
+                            <span style="font-size:11px; background:#d1fae5; color:#059669; padding:5px 12px; border-radius:10px; font-weight:700; z-index:10; margin-left:auto;">Secured</span>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function dispatch(item, type) {
+            if (!currentUser) { showAlert('Please login first.', true); return; }
+            const subjectField = document.getElementById('cfg-subject');
+            const linkField = document.getElementById('cfg-link');
+            const subject = subjectField ? subjectField.value.trim() : '';
+            const link = linkField ? linkField.value.trim() : '';
+
+            if(type === 'whatsapp') {
+                const cleanNumber = item.replace(/[^0-9]/g, '');
+                const fullMessage = `${subject}\n\n${link}`;
+                window.location.href = `https://api.whatsapp.com/send?phone=${cleanNumber}&text=${encodeURIComponent(fullMessage)}`;
+                uniqueWhatsApp = uniqueWhatsApp.filter(i => i !== item);
+            } else {
+                const encSubject = encodeURIComponent(subject);
+                const encBody = encodeURIComponent(link);
+                window.location.href = `mailto:${item}?subject=${encSubject}&body=${encBody}`;
+                uniqueEmails = uniqueEmails.filter(i => i !== item);
+            }
+
+            sentItems.push(item);
+            saveCurrentUserData();
+            updateDashboards();
+            renderLists();
+            showAlert('Dispatched securely!');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.custom-dropdown-container')) {
+                let dList = document.getElementById('dropdown-menu');
+                if(dList) dList.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>
