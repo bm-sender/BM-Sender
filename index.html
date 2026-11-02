@@ -52,6 +52,13 @@
             }
         }
 
+        /* Smooth Shining Light Animation for Cards */
+        @keyframes lightShine {
+            0% { border-color: rgba(255, 255, 255, 0.8); box-shadow: 8px 8px 20px rgba(148, 163, 184, 0.4), inset 0 0 0px rgba(255,255,255,0); }
+            50% { border-color: rgba(220, 38, 38, 0.6); box-shadow: 8px 8px 25px rgba(220, 38, 38, 0.25), inset 0 0 12px rgba(255,255,255,0.8); }
+            100% { border-color: rgba(255, 255, 255, 0.8); box-shadow: 8px 8px 20px rgba(148, 163, 184, 0.4), inset 0 0 0px rgba(255,255,255,0); }
+        }
+
         /* iOS Style Frosted Glass Notification */
         .notification {
             position: fixed;
@@ -297,6 +304,24 @@
             width: 100%;
         }
 
+        .btn-edit-action {
+            background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+            color: #fff;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.5), inset 0 2px 4px rgba(255,255,255,0.7);
+            width: 100%;
+            margin-top: 10px;
+        }
+
         .auth-card {
             background: linear-gradient(145deg, #ffffff, #cbd8ee);
             border-radius: 26px;
@@ -385,6 +410,11 @@
             box-shadow: inset 5px 5px 10px rgba(148, 163, 184, 0.35), inset -5px -5px 10px rgba(255, 255, 255, 1);
             color: #0f172a;
         }
+        .custom-input:disabled, .custom-textarea:disabled {
+            background: #e2e8f0;
+            color: #64748b;
+            cursor: not-allowed;
+        }
         .custom-textarea { height: 100px; resize: none; }
 
         .paste-box-wrapper {
@@ -412,6 +442,12 @@
             justify-content: space-between;
             cursor: pointer;
             box-shadow: 10px 10px 25px rgba(148, 163, 184, 0.5), -10px -10px 25px rgba(255, 255, 255, 1);
+        }
+        .selected-bar.disabled {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+            cursor: not-allowed;
+            opacity: 0.7;
         }
         .selected-bar .left-info { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 13px; color: #0f172a; }
 
@@ -457,60 +493,111 @@
         .big-logo-box img { width: 48px; height: 48px; object-fit: contain; margin-bottom: 6px; }
         .big-logo-box span { display: block; font-size: 13px; font-weight: 700; color: #334155; }
 
+        /* BRAND NEW PREMIUM HIGH-TECH PROCESSING BOX DESIGN */
         .processing-box {
             display: none;
-            background: #fff;
-            padding: 16px;
-            border-radius: 16px;
-            margin-top: 14px;
-            border: 1.5px solid #cbd5e1;
-            box-shadow: 10px 10px 20px rgba(148, 163, 184, 0.35);
+            background: linear-gradient(145deg, #f8fafc, #edf2f7);
+            padding: 18px;
+            border-radius: 20px;
+            margin-top: 16px;
+            border: 2px solid rgba(220, 38, 38, 0.25);
+            box-shadow: 0 15px 35px rgba(148, 163, 184, 0.4), inset 0 2px 4px rgba(255, 255, 255, 1);
+            position: relative;
+            overflow: hidden;
         }
-        .processing-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: #0f172a; }
-        .progress-bar-bg { width: 100%; height: 10px; background: #f1f5f9; border-radius: 8px; overflow: hidden; }
-        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(135deg, #ff416c, #dc2626); }
-        .time-info { display: flex; justify-content: space-between; font-size: 11px; color: #64748b; margin-top: 6px; }
+        .processing-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            font-size: 12px; 
+            font-weight: 700; 
+            margin-bottom: 10px; 
+            color: #0f172a; 
+        }
+        .processing-title-flex {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        /* Custom High-Tech Pulsing Spinner */
+        .tech-pulse-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(220, 38, 38, 0.2);
+            border-top: 2.5px solid #dc2626;
+            border-radius: 50%;
+            animation: techSpin 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+        @keyframes techSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-        /* === PERFECT ALIGNED ITEM CARD FIX (NO OVERFLOW) === */
+        /* Ultra-Smooth Progress Bar */
+        .progress-bar-bg { 
+            width: 100%; 
+            height: 12px; 
+            background: #e2e8f0; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .progress-bar-fill { 
+            height: 100%; 
+            width: 0%; 
+            background: linear-gradient(90deg, #ff416c, #dc2626, #ff4b2b); 
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.5);
+            transition: width 0.4s cubic-bezier(0.1, 0.8, 0.3, 1);
+        }
+        .time-info { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 11px; 
+            font-weight: 600;
+            color: #64748b; 
+            margin-top: 8px; 
+        }
+
+        /* Item Card with Smooth Shining Light Animation & Strict Layout Fix */
         .item-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 10px;
+            padding: 8px 12px;
             background: linear-gradient(145deg, #ffffff, #d2def2);
-            border-radius: 16px;
-            margin-bottom: 10px;
+            border-radius: 18px;
+            margin-bottom: 12px;
             border: 2px solid rgba(255, 255, 255, 1);
-            box-shadow: 8px 8px 20px rgba(148, 163, 184, 0.4);
-            height: 60px;
+            height: 62px;
             position: relative;
             width: 100%;
-            overflow: hidden;
+            animation: lightShine 3.5s ease-in-out infinite;
         }
 
         .email-security-sheet {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            bottom: 6px;
-            width: calc(100% - 110px); /* Strictly fits inside card without pushing Send button */
+            position: relative;
+            flex: 1;
+            height: 42px;
             background: linear-gradient(145deg, #ffffff, #cbd8ee);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            z-index: 5;
-            pointer-events: none;
             display: flex;
             align-items: center;
-            padding: 0 8px;
-            gap: 6px;
+            padding: 0 10px;
+            gap: 10px;
             border: 1.5px solid rgba(220, 38, 38, 0.25);
-            border-radius: 12px;
+            border-radius: 14px;
             box-shadow: inset 0 2px 4px rgba(255,255,255,1);
+            margin-right: 10px;
+            overflow: hidden;
         }
 
         .security-sheet-icon {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             background: rgba(220, 38, 38, 0.15);
             border: 1px solid rgba(220, 38, 38, 0.4);
             border-radius: 50%;
@@ -523,46 +610,41 @@
         }
 
         .security-sheet-text {
-            font-size: 9px;
+            font-size: 13px;
             font-weight: 800;
             color: #0f172a;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            text-transform: capitalize;
+            letter-spacing: 0.3px;
         }
 
         .item-text-secure {
-            font-size: 12px;
-            font-weight: 700;
-            color: #0f172a;
-            z-index: 1;
-            opacity: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: calc(100% - 115px);
+            display: none;
         }
 
-        /* 100% FIXED ALIGNED SEND BUTTON */
         .send-btn {
             color: white;
             border: none;
-            padding: 0 10px;
-            border-radius: 12px;
+            padding: 0 14px;
+            border-radius: 14px;
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 6px;
             box-shadow: 0 4px 12px rgba(220,38,38,0.4);
-            width: 90px;
-            min-width: 90px;
-            height: 40px;
-            z-index: 10;
+            width: 95px;
+            min-width: 95px;
+            height: 42px;
             flex-shrink: 0;
-            margin-left: auto; /* Aligns strictly to the right side always */
+            transition: transform 0.1s ease;
+        }
+        .send-btn:active {
+            transform: scale(0.95);
         }
 
         .empty-state { text-align: center; padding: 25px 16px; color: #94a3b8; font-weight: 500; font-size: 13px; }
@@ -603,7 +685,7 @@
         <!-- Main Content Container -->
         <div class="main-container" id="main-scroll-box" onscroll="handleScrollHide()">
 
-            <!-- AUTH SCREEN (No Sheet - Completely Clean) -->
+            <!-- AUTH SCREEN -->
             <div id="page-auth" class="tab-page active">
                 <div class="auth-card">
                     <div class="auth-title" id="auth-title-text">BM Sander Secure Login</div>
@@ -707,7 +789,7 @@
                 </div>
             </div>
 
-            <!-- TAB 2: PASTE DATA (No Sheet - Clean Textarea Input) -->
+            <!-- TAB 2: PASTE DATA -->
             <div id="page-paste" class="tab-page">
                 <div class="sticky-dashboard-wrapper">
                     <div class="wallet-card">
@@ -726,17 +808,21 @@
                         <i class="fas fa-filter"></i> Clean & Extract Data
                     </button>
 
+                    <!-- BRAND NEW HIGH-TECH PROCESSING BOX -->
                     <div class="processing-box" id="processing-box">
                         <div class="processing-header">
-                            <span><i class="fas fa-spinner fa-spin"></i> Processing & Cleaning...</span>
-                            <span id="speed-msg-text" style="font-size: 11px; color: #0284c7; font-weight: 700;">Saved Locally</span>
+                            <div class="processing-title-flex">
+                                <div class="tech-pulse-spinner"></div>
+                                <span style="color: #0f172a; font-weight: 800;">Processing & Extracting...</span>
+                            </div>
+                            <span style="font-size: 10px; color: #dc2626; font-weight: 700; background: rgba(220,38,38,0.1); padding: 3px 8px; border-radius: 6px;">Network Dependent</span>
                         </div>
                         <div class="progress-bar-bg">
                             <div class="progress-bar-fill" id="progress-fill"></div>
                         </div>
                         <div class="time-info">
-                            <span id="items-calc-text">0 items loaded</span>
-                            <span>Ready</span>
+                            <span id="items-calc-text" style="color: #0f172a; font-weight: 700;">0 items loaded</span>
+                            <span id="time-countdown-text">Calculating time...</span>
                         </div>
                     </div>
                 </div>
@@ -749,7 +835,7 @@
                         <div class="wallet-header">BM SANDER CONFIGURATION</div>
                         <div class="wallet-row">
                             <div class="balance-val" id="config-dash-mode">No Platform Selected</div>
-                            <div class="coins-val"><i class="fas fa-cog"></i> Setup Mode</div>
+                            <div class="coins-val" id="config-status-badge"><i class="fas fa-cog"></i> Setup Mode</div>
                         </div>
                     </div>
                 </div>
@@ -757,12 +843,12 @@
                 <div style="background:linear-gradient(145deg, #ffffff, #cbd8ee); padding:20px; border-radius:24px; border:2px solid rgba(255,255,255,1); margin-bottom:16px; box-shadow:12px 12px 30px rgba(148, 163, 184, 0.45);">
                     <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">Select Official Platform</label>
                     <div class="custom-dropdown-container">
-                        <div class="selected-bar" onclick="playBeep('click'); toggleDropdown()">
+                        <div class="selected-bar" id="dropdown-bar-element" onclick="playBeep('click'); toggleDropdown()">
                             <div class="left-info" id="selected-platform-info">
                                 <img src="" id="selected-logo" style="display:none; width:22px; height:22px; object-fit:contain;">
                                 <span style="color:#94a3b8; font-weight:500;" id="selected-text">-- Select Platform --</span>
                             </div>
-                            <i class="fa-solid fa-chevron-down" style="font-size:12px; color:#64748b;"></i>
+                            <i class="fa-solid fa-chevron-down" id="dropdown-arrow-icon" style="font-size:12px; color:#64748b;"></i>
                         </div>
 
                         <div class="dropdown-options-list" id="dropdown-menu">
@@ -788,8 +874,12 @@
                     <label style="font-size:11px; font-weight:700; color:#1e293b; display:block; margin-bottom:4px;">Message Body / Promo Link</label>
                     <textarea class="custom-textarea" id="cfg-link" placeholder="Enter Message text or Link..."></textarea>
 
-                    <button class="btn-action" onclick="playBeep('click'); saveConfig()">
+                    <button class="btn-action" id="btn-save-cfg" onclick="playBeep('click'); saveConfig()">
                         <i class="fas fa-save"></i> Save Configuration
+                    </button>
+
+                    <button class="btn-edit-action" id="btn-edit-cfg" style="display:none;" onclick="playBeep('click'); enableConfigEdit()">
+                        <i class="fas fa-edit"></i> Edit Configuration
                     </button>
                 </div>
             </div>
@@ -808,7 +898,7 @@
 
                 <div style="background:linear-gradient(145deg, #ffffff, #cbd8ee); padding:14px; border-radius:24px; border:2px solid rgba(255,255,255,1); box-shadow:12px 12px 30px rgba(148, 163, 184, 0.45);">
                     <div id="unique-email-list">
-                        <div class="empty-state"><p>No unique emails extracted yet.</p></div>
+                        <div class="empty-state"><p>No unique names extracted yet.</p></div>
                     </div>
                 </div>
             </div>
@@ -935,6 +1025,7 @@
         let sentItems = [];
         let totalPastedCount = 0;
         let isConfigSaved = false;
+        let isConfigLocked = false;
 
         const ADMIN_MASTER_PIN = "BmSander#2026_@Pro-123=<*!";
 
@@ -1087,7 +1178,8 @@
                         uniqueWhatsApp: [],
                         duplicateItems: [],
                         sentItems: [],
-                        totalPastedCount: 0
+                        totalPastedCount: 0,
+                        savedConfig: null
                     };
                     saveUsersDB(db);
                     playBeep('success');
@@ -1123,6 +1215,29 @@
 
             document.getElementById('top-auth-icons').classList.remove('hidden-auth-element');
             document.getElementById('bottom-nav-bar').style.display = 'flex';
+            
+            if(userData.savedConfig) {
+                const cfg = userData.savedConfig;
+                selectedPlatform = cfg.platform;
+                selectedPlatformName = cfg.platformName;
+                selectedPlatformLogo = cfg.platformLogo;
+                document.getElementById('cfg-subject').value = cfg.subject;
+                document.getElementById('cfg-link').value = cfg.link;
+
+                document.getElementById('selected-logo').src = cfg.platformLogo;
+                document.getElementById('selected-logo').style.display = 'block';
+                document.getElementById('selected-text').innerText = cfg.platformName;
+
+                const previewCard = document.getElementById('big-logo-display');
+                document.getElementById('preview-logo-img').src = cfg.platformLogo;
+                document.getElementById('preview-title-text').innerText = `${cfg.platformName} Selected`;
+                previewCard.style.display = 'block';
+
+                applyConfigState(true);
+            } else {
+                applyConfigState(false);
+            }
+
             updateDashboards();
             renderLists();
             switchPage('home', document.querySelectorAll('.nav-link')[0]);
@@ -1187,15 +1302,29 @@
                 db[currentUser].duplicateItems = duplicateItems;
                 db[currentUser].sentItems = sentItems;
                 db[currentUser].totalPastedCount = totalPastedCount;
+                if(isConfigSaved && selectedPlatform) {
+                    db[currentUser].savedConfig = {
+                        platform: selectedPlatform,
+                        platformName: selectedPlatformName,
+                        platformLogo: selectedPlatformLogo,
+                        subject: document.getElementById('cfg-subject').value.trim(),
+                        link: document.getElementById('cfg-link').value.trim()
+                    };
+                }
                 saveUsersDB(db);
             }
         }
 
         function toggleDropdown() {
+            if(isConfigLocked) {
+                showAlert('Config is Locked! Click Edit to change.', true);
+                return;
+            }
             document.getElementById('dropdown-menu').classList.toggle('show');
         }
 
         function selectOption(value, name, logo) {
+            if(isConfigLocked) return;
             triggerSecurityLock(() => {
                 selectedPlatform = value;
                 selectedPlatformName = name;
@@ -1210,7 +1339,7 @@
                 document.getElementById('preview-title-text').innerText = `${name} Selected`;
                 previewCard.style.display = 'block';
 
-                toggleDropdown();
+                document.getElementById('dropdown-menu').classList.remove('show');
                 playBeep('success');
                 showAlert(`${name} Configured!`);
             });
@@ -1234,6 +1363,9 @@
         }
 
         function switchPage(pageId, el) {
+            if(!currentUser && pageId !== 'auth') {
+                pageId = 'auth';
+            }
             triggerSecurityLock(() => {
                 document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
                 document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
@@ -1280,20 +1412,59 @@
                     return;
                 }
 
-                isConfigSaved = true;
+                applyConfigState(true);
+                saveCurrentUserData();
+
+                playBeep('success');
+                showAlert('Configuration Permanently Locked & Saved!');
+                switchPage('home', document.querySelectorAll('.nav-link')[0]);
+            });
+        }
+
+        function enableConfigEdit() {
+            triggerSecurityLock(() => {
+                applyConfigState(false);
+                playBeep('click');
+                showAlert('Fields Unlocked for Editing!');
+            });
+        }
+
+        function applyConfigState(locked) {
+            isConfigSaved = locked;
+            isConfigLocked = locked;
+
+            const subjInput = document.getElementById('cfg-subject');
+            const linkInput = document.getElementById('cfg-link');
+            const dropBar = document.getElementById('dropdown-bar-element');
+            const saveBtn = document.getElementById('btn-save-cfg');
+            const editBtn = document.getElementById('btn-edit-cfg');
+
+            if(locked) {
+                subjInput.disabled = true;
+                linkInput.disabled = true;
+                dropBar.classList.add('disabled');
+                saveBtn.style.display = 'none';
+                editBtn.style.display = 'flex';
+
                 document.getElementById('middle-icon').className = 'fas fa-check';
-                
+
                 const badge = document.getElementById('status-badge-home');
                 if(badge) {
                     badge.className = 'coins-val ready';
-                    badge.innerHTML = `<i class="fas fa-check-circle"></i> ${selectedPlatform.toUpperCase()} Ready`;
+                    badge.innerHTML = `<i class="fas fa-check-circle"></i> ${selectedPlatform.toUpperCase()} Locked`;
+                }
+
+                const cfgBadge = document.getElementById('config-status-badge');
+                if(cfgBadge) {
+                    cfgBadge.className = 'coins-val ready';
+                    cfgBadge.innerHTML = `<i class="fas fa-lock"></i> Locked`;
                 }
                 
                 const dashPasted = document.getElementById('dash-total-pasted');
                 if(dashPasted) dashPasted.innerText = `${selectedPlatform.toUpperCase()} Active`;
                 
                 const configMode = document.getElementById('config-dash-mode');
-                if(configMode) configMode.innerText = `${selectedPlatform.toUpperCase()} Mode Active`;
+                if(configMode) configMode.innerText = `${selectedPlatform.toUpperCase()} Mode Locked`;
 
                 const gmailBtn = document.getElementById('nav-gmail-btn');
                 const waBtn = document.getElementById('nav-wa-btn');
@@ -1305,18 +1476,34 @@
                     if(gmailBtn) gmailBtn.classList.remove('hidden-tab');
                     if(waBtn) waBtn.classList.add('hidden-tab');
                 }
+            } else {
+                subjInput.disabled = false;
+                linkInput.disabled = false;
+                dropBar.classList.remove('disabled');
+                saveBtn.style.display = 'flex';
+                editBtn.style.display = 'none';
 
-                playBeep('success');
-                showAlert('Configuration Saved!');
-                switchPage('home', document.querySelectorAll('.nav-link')[0]);
-            });
+                document.getElementById('middle-icon').className = 'fas fa-times';
+
+                const badge = document.getElementById('status-badge-home');
+                if(badge) {
+                    badge.className = 'coins-val';
+                    badge.innerHTML = `<i class="fas fa-times-circle"></i> Config Pending`;
+                }
+
+                const cfgBadge = document.getElementById('config-status-badge');
+                if(cfgBadge) {
+                    cfgBadge.className = 'coins-val';
+                    cfgBadge.innerHTML = `<i class="fas fa-cog"></i> Setup Mode`;
+                }
+            }
         }
 
         function startProcessing() {
             triggerSecurityLock(() => {
                 if(!isConfigSaved) {
                     playBeep('error');
-                    showAlert('Please setup config first!', true);
+                    showAlert('Please setup and save config first!', true);
                     switchPage('config', null);
                     return;
                 }
@@ -1331,33 +1518,43 @@
                 const lines = rawText.split('\n').filter(l => l.trim());
                 const itemCount = lines.length;
 
+                // SMART PROCESSING TIME LOGIC DEPENDING ON ITEM COUNT
+                // 1 item = 2 sec, 1000 items = ~75 sec, 2000 items = 150 sec (2.5 mins), 4000+ items = 300 sec
                 let totalSeconds = 2;
+                if (itemCount === 1) totalSeconds = 2;
+                else if (itemCount > 1 && itemCount <= 500) totalSeconds = 15;
+                else if (itemCount > 500 && itemCount <= 1000) totalSeconds = 45;
+                else if (itemCount > 1000 && itemCount <= 2000) totalSeconds = 150; // 2.5 minutes for 2000 items
+                else if (itemCount > 2000) totalSeconds = 300;
 
                 document.getElementById('processing-box').style.display = 'block';
                 document.getElementById('items-calc-text').innerText = `${itemCount} items loaded`;
 
                 let elapsedSeconds = 0;
                 let fill = document.getElementById('progress-fill');
+                let countdownEl = document.getElementById('time-countdown-text');
+                fill.style.width = '0%';
 
                 let timer = setInterval(() => {
                     elapsedSeconds++;
                     let progress = Math.min(100, Math.round((elapsedSeconds / totalSeconds) * 100));
-                    
                     fill.style.width = progress + '%';
+
+                    let remaining = Math.max(0, totalSeconds - elapsedSeconds);
+                    let remMins = Math.floor(remaining / 60);
+                    let remSecs = remaining % 60;
+                    countdownEl.innerText = remMins > 0 ? `Est: ${remMins}m ${remSecs}s left` : `Est: ${remSecs}s left`;
 
                     if(elapsedSeconds >= totalSeconds) {
                         clearInterval(timer);
                         setTimeout(() => {
                             document.getElementById('processing-box').style.display = 'none';
-                            
-                            // AUTO CLEAR TEXTAREA WHEN CLEAN & EXTRACT FINISHES
                             document.getElementById('raw-input').value = '';
                             updatePasteDashboard();
-
                             executeExtraction(rawText);
                         }, 200);
                     }
-                }, 500);
+                }, 1000);
             });
         }
 
@@ -1367,11 +1564,14 @@
                 const rawMatches = rawText.match(phoneRegex) || [];
                 const cleanMatches = rawMatches.map(n => n.replace(/[^0-9]/g, '')).filter(n => n.length >= 8);
 
-                const seen = new Set();
-                uniqueWhatsApp = [];
+                const seen = new Set([...uniqueWhatsApp]);
                 cleanMatches.forEach(num => {
-                    if(seen.has(num)) duplicateItems.push(num);
-                    else { seen.add(num); uniqueWhatsApp.push(num); }
+                    if(seen.has(num)) {
+                        duplicateItems.push(num);
+                    } else {
+                        seen.add(num);
+                        uniqueWhatsApp.push(num); // Append new items without losing old ones
+                    }
                 });
 
                 switchPage('whatsapp', document.getElementById('nav-wa-btn'));
@@ -1379,12 +1579,15 @@
                 const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
                 const matches = rawText.match(emailRegex) || [];
 
-                const seen = new Set();
-                uniqueEmails = [];
+                const seen = new Set([...uniqueEmails]);
                 matches.forEach(email => {
                     const clean = email.toLowerCase();
-                    if(seen.has(clean)) duplicateItems.push(clean);
-                    else { seen.add(clean); uniqueEmails.push(clean); }
+                    if(seen.has(clean)) {
+                        duplicateItems.push(clean);
+                    } else {
+                        seen.add(clean);
+                        uniqueEmails.push(clean); // Append new emails without losing old ones
+                    }
                 });
 
                 switchPage('gmail', document.getElementById('nav-gmail-btn'));
@@ -1395,7 +1598,7 @@
             updateDashboards();
             renderLists();
             playBeep('success');
-            showAlert('Extracted & Saved!');
+            showAlert('Extracted & Appended Successfully!');
         }
 
         function updateDashboards() {
@@ -1426,7 +1629,7 @@
                 const currentLog = `
                     <div style="font-size:12px; color:#334155; padding:6px 0; border-bottom:1px solid #cbd5e1; font-weight:600;">
                         <i class="fas fa-check-circle" style="color:#10b981;"></i> [Storage Saved]: 
-                        <strong>${uniqueEmails.length + uniqueWhatsApp.length} Encrypted Items</strong>
+                        <strong>${uniqueEmails.length + uniqueWhatsApp.length} Items</strong>
                     </div>
                 `;
                 const histBox = document.getElementById('dashboard-history');
@@ -1440,19 +1643,28 @@
             }
         }
 
+        function getOnlyTextName(item) {
+            if (item.includes('@')) {
+                let namePart = item.split('@')[0];
+                let pureText = namePart.replace(/[0-9]/g, '');
+                if(!pureText) pureText = "User";
+                return pureText.charAt(0).toUpperCase() + pureText.slice(1);
+            }
+            return item;
+        }
+
         function renderLists() {
             const eContainer = document.getElementById('unique-email-list');
             if(eContainer) {
                 if(uniqueEmails.length === 0) {
-                    eContainer.innerHTML = `<div class="empty-state"><p>No unique emails extracted yet.</p></div>`;
+                    eContainer.innerHTML = `<div class="empty-state"><p>No unique names extracted yet.</p></div>`;
                 } else {
                     eContainer.innerHTML = uniqueEmails.map(email => `
                         <div class="item-card">
                             <div class="email-security-sheet">
-                                <div class="security-sheet-icon"><i class="fas fa-shield-alt"></i></div>
-                                <div class="security-sheet-text">SECURE ENCRYPTED QUEUE</div>
+                                <div class="security-sheet-icon"><i class="fas fa-user"></i></div>
+                                <div class="security-sheet-text">${getOnlyTextName(email)}</div>
                             </div>
-                            <span class="item-text-secure">${email}</span>
                             <button class="send-btn" style="background: linear-gradient(135deg, #ff416c, #dc2626)" onclick="playBeep('success'); dispatch('${email}', 'gmail')"><i class="fas fa-paper-plane"></i> Send</button>
                         </div>
                     `).join('');
@@ -1467,10 +1679,9 @@
                     wContainer.innerHTML = uniqueWhatsApp.map(num => `
                         <div class="item-card">
                             <div class="email-security-sheet">
-                                <div class="security-sheet-icon"><i class="fas fa-shield-alt"></i></div>
-                                <div class="security-sheet-text">SECURE WHATSAPP QUEUE</div>
+                                <div class="security-sheet-icon"><i class="fab fa-whatsapp"></i></div>
+                                <div class="security-sheet-text">${num}</div>
                             </div>
-                            <span class="item-text-secure">${num}</span>
                             <button class="send-btn" style="background: #10b981" onclick="playBeep('success'); dispatch('${num}', 'whatsapp')"><i class="fab fa-whatsapp"></i> Send</button>
                         </div>
                     `).join('');
@@ -1486,10 +1697,9 @@
                         <div class="item-card">
                             <div class="email-security-sheet">
                                 <div class="security-sheet-icon"><i class="fas fa-check-circle"></i></div>
-                                <div class="security-sheet-text">SECURE DISPATCHED ITEM</div>
+                                <div class="security-sheet-text">${getOnlyTextName(item)} (Sent)</div>
                             </div>
-                            <span class="item-text-secure">${item}</span>
-                            <span style="font-size:11px; background:#d1fae5; color:#059669; padding:5px 12px; border-radius:10px; font-weight:700; z-index:10; margin-left:auto;">Secured</span>
+                            <span style="font-size:11px; background:#d1fae5; color:#059669; padding:6px 14px; border-radius:12px; font-weight:700;">Done</span>
                         </div>
                     `).join('');
                 }
@@ -1519,7 +1729,7 @@
             saveCurrentUserData();
             updateDashboards();
             renderLists();
-            showAlert('Dispatched securely!');
+            showAlert('Dispatched successfully!');
         }
 
         window.onclick = function(event) {
